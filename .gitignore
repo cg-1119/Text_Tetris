@@ -1,18 +1,4 @@
-# ===== CMake + CLion 빌드 아티팩트 무시 =====
-
-# CMake 빌드 디렉토리 전체 (기본값: cmake-build-debug 또는 build/, out/, 등)
-cmake-build-debug/
-build/
-CMakeFiles/
-CMakeCache.txt
-*.cmake
-Makefile
-
-# IDE 설정 파일 (CLion 등)
-cmake-build-debug/
-.clion*
-
-# 오브젝트 파일, 바이너리, 로그 등
+# 오브젝트 파일, 바이너리, 로그, 빌드
 *.o
 *.obj
 *.so
@@ -22,6 +8,7 @@ cmake-build-debug/
 *.a
 *.log
 *.log.*
+tetris
 
 # MacOS 메타데이터
 .DS_Store
