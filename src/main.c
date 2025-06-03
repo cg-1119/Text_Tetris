@@ -1,10 +1,19 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "include/common.h"
 #include "include/logic.h"
 
 int main(void)
 {
+	/*
+		About XTerm Control Sequences:
+        https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+
+		Enable alternate screen buffer(1049h), Disable auto-wrap mode(7l)
+	*/
+	printf("\x1b[?1049h\x1b[?7l");
+
 	int menu = 1;
 
 	while (menu)
@@ -23,9 +32,10 @@ int main(void)
 			print_result();
 
 		else if (menu == 4)
-			exit(0);
-
+			break;
 	}
 
+	//Restore screen buffer(1049l), Enable auto-wrap mode(7h)
+	printf("\x1b[?1049l\x1b[?7h");
 	return 0;
 }
