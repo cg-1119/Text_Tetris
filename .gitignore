@@ -79,3 +79,4 @@ cmake-build-debug
 *.log
 *.json
 *.ninja
+/cmake-build-debug/
