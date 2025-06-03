@@ -17,17 +17,14 @@ int main(void)
 			menu = game_start();
 		}
 		else if (menu == 2)
-		{
 			search_result();
-		}
+
 		else if (menu == 3)
-		{
 			print_result();
-		}
+
 		else if (menu == 4)
-		{
 			exit(0);
-		}
+
 	}
 
 	return 0;
