@@ -20,3 +20,7 @@ void init_board(void) {
         tetris_table[20][col] = 1;
     }
 }
+
+bool is_collision(int type, int rotation, int row, int col) {
+    return false;
+}

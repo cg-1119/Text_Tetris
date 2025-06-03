@@ -30,6 +30,8 @@
 #define GAME_END   1
 
 extern char tetris_table[21][10];
+// 블럭 집합
+extern char (*all_blocks[7])[4][4];
 
 // 게임 결과 저장용 구조체
 struct result {

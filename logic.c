@@ -6,6 +6,7 @@
 #include "include/board.h"
 #include "include/input.h"
 #include "include/render.h"
+#include "include/tetromino.h"
 
 int game = GAME_END;
 
@@ -48,26 +49,27 @@ int game_start(void)
 {
     setup_terminal();
     init_board();
+    init_tetromino();
 
     // 게임 루프
     while (game == GAME_START) {
         int key = get_key();
         if (key) {
             // 눌린 키가 있을 때만 처리
-            // if (key == 'j' || key == 'J')
-            //     move_left();
-            // else if (key == 'l' || key == 'L')
-            //     move_right();
+            if (key == 'j' || key == 'J')
+                move_left();
+            else if (key == 'l' || key == 'L')
+                move_right();
             // else if (key == 'k' || key == 'K')
             //     move_down();
             // else if (key == 'i' || key == 'I')
             //     rotate_block();
             // else if (key == 'a' || key == 'A')
             //     drop_to_bottom();
-            if (key == 'p' || key == 'P')
+            else if (key == 'p' || key == 'P')
                 game = GAME_END;
         }
-        draw_board();
+        draw_screen();
         usleep(50000);
     }
     restore_terminal();
