@@ -21,6 +21,6 @@ void init_board(void) {
     }
 }
 
-bool is_collision(int type, int rotation, int row, int col) {
+bool is_collision(int type, int rotation, int x, int y) {
     return false;
 }
