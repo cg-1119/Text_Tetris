@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #include "include/board.h"
 #include "include/input.h"
@@ -9,6 +10,14 @@
 #include "include/tetromino.h"
 
 int game = GAME_END;
+
+// 시간 비교 헬퍼 함수
+static long time_diff_ms(struct timeval *start, struct timeval *end) {
+    long secs  = end->tv_sec  - start->tv_sec;
+    long usecs = end->tv_usec - start->tv_usec;
+    return secs * 1000 + usecs / 1000;
+}
+
 
 int display_menu(void)
 {
@@ -51,6 +60,10 @@ int game_start(void)
     init_board();
     init_tetromino();
 
+    const long drop_ms = 500; // 블록 자동으로 떨어지는 간격 = 0.5초
+    struct timeval prev_time, curr_time;
+    gettimeofday(&prev_time, NULL);
+
     // 게임 루프
     while (game == GAME_START) {
         int key = get_key();
@@ -60,15 +73,29 @@ int game_start(void)
                 move_left();
             else if (key == 'l' || key == 'L')
                 move_right();
-            else if (key == 'k' || key == 'K')
+            else if (key == 'k' || key == 'K') {
+                // 직접 다운을 했으면 타이머 리셋
                 move_down();
+                gettimeofday(&prev_time, NULL);
+            }
             else if (key == 'i' || key == 'I')
                 rotate_block();
-            else if (key == 'a' || key == 'A')
+            else if (key == 'a' || key == 'A') {
                 drop_to_bottom();
+                gettimeofday(&prev_time, NULL);
+            }
             else if (key == 'p' || key == 'P')
                 game = GAME_END;
         }
+        // 자동 낙하 계산
+        gettimeofday(&curr_time, NULL);
+        long elapsed = time_diff_ms(&prev_time, &curr_time);
+        if (elapsed >= drop_ms) {
+            move_down();
+            gettimeofday(&prev_time, NULL); // 자동 낙하 후 기준 시각을 현재 시각으로 재설정
+        }
+
+
         draw_screen();
         usleep(50000);
     }
