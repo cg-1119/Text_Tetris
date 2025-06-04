@@ -8,7 +8,11 @@
             "options": {
                 "cwd": "${workspaceFolder}/src"
             },
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
             "label": "clean",

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "include/common.h"
 #include "include/logic.h"
@@ -13,6 +14,7 @@ int main(void)
 		Enable alternate screen buffer(1049h), Disable auto-wrap mode(7l)
 	*/
 	printf("\x1b[?1049h\x1b[?7l");
+	srand((unsigned)time(NULL));
 
 	int menu = 1;
 
