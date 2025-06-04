@@ -20,7 +20,6 @@ void init_board(void) {
         tetris_table[20][col] = 1;
     }
 }
-
 bool is_collision(int type, int rotation, int x, int y) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
@@ -36,7 +35,7 @@ bool is_collision(int type, int rotation, int x, int y) {
                 if (board_row >= 21) {
                     return true;
                 }
-                // 4) 다른 블록 충돌 검사
+                // 3) 다른 블록 충돌 검사
                 if (tetris_table[board_row][board_col] != 0) {
                     return true;
                 }
@@ -45,3 +44,19 @@ bool is_collision(int type, int rotation, int x, int y) {
     }
     return false;
 }
+
+void fix_block(int type, int rotation, int x, int y) {
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            if (all_blocks[type][rotation][row][col]) {
+                int board_row = y + row;
+                int board_col = x + col;
+                // 유효한 공간에 존재하면 블럭 고정
+                if (board_row >= 0 && board_row < 21 && board_col >= 0 && board_col < 10) {
+                    tetris_table[board_row][board_col] = 1;
+                }
+            }
+        }
+    }
+}
+void clear_full_line(int x, int y) {}

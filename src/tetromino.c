@@ -17,7 +17,6 @@ void init_tetromino(void) {
     spawn_new_block();
 }
 
-/* 현재 블록 = next, 위치/회전 초기화 후 충돌 검사 → 다음 블록 생성 */
 void spawn_new_block(void) {
     block_number = next_block_number;
     block_state  = LEFT; // 초기 회전 상태
@@ -41,7 +40,16 @@ void move_right(void) {
     if (!is_collision(block_number, block_state, x + 1, y))
         x++;
 }
-void move_down(void) {}
+void move_down(void) {
+    if (!is_collision(block_number, block_state, x, y + 1))
+        y++;
+    else {
+        fix_block(block_number, block_state, x, y);
+        // TODO 한 줄이 찼으면 지우는 로직 추가
+        clear_full_line(x, y);   
+        spawn_new_block();
+    }
+}
 void rotate_block(void) {
     int new_state = (block_state + 1) % 4;
     if (!is_collision(block_number, new_state, x, y)) {

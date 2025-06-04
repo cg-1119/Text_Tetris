@@ -60,8 +60,8 @@ int game_start(void)
                 move_left();
             else if (key == 'l' || key == 'L')
                 move_right();
-            // else if (key == 'k' || key == 'K')
-            //     move_down();
+            else if (key == 'k' || key == 'K')
+                move_down();
             else if (key == 'i' || key == 'I')
                 rotate_block();
             // else if (key == 'a' || key == 'A')
