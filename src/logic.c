@@ -64,8 +64,8 @@ int game_start(void)
                 move_down();
             else if (key == 'i' || key == 'I')
                 rotate_block();
-            // else if (key == 'a' || key == 'A')
-            //     drop_to_bottom();
+            else if (key == 'a' || key == 'A')
+                drop_to_bottom();
             else if (key == 'p' || key == 'P')
                 game = GAME_END;
         }

@@ -46,7 +46,7 @@ void move_down(void) {
     else {
         fix_block(block_number, block_state, x, y);
         // TODO 한 줄이 찼으면 지우는 로직 추가
-        clear_full_line(x, y);   
+        clear_full_line();   
         spawn_new_block();
     }
 }
@@ -56,7 +56,7 @@ void rotate_block(void) {
         block_state = new_state;
         return;
     }
-    // wall kick 기능 추가
+    // wall kick 기능 추가 (x 축만)
     if (!is_collision(block_number, new_state, x - 1, y)) {
         x = x - 1;
         block_state = new_state;
@@ -69,4 +69,11 @@ void rotate_block(void) {
     }
 
 }
-void drop_to_bottom(void) {}
+void drop_to_bottom(void) {
+    while (!is_collision(block_number, block_state, x, y + 1)) {
+        y++;
+    }
+    fix_block(block_number, block_state, x, y);
+    clear_full_line();   
+    spawn_new_block();
+}
