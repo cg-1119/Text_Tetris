@@ -10,15 +10,16 @@ int block_state       = 0;
 int x = 3, y = 0;
 int best_point = 0;
 long point     = 0;
-// ---------------------------------------------------------
+// ------------------------------------------------------------------
 // 블록들의 순서를 저장하기 위해 큐를 사용하였습니다.
 // bagQueue에는 0에서 7까지의 숫자를 무작위로 집어넣어 다음 블록을 꺼내쓰고
 // 만약 bagQueue가 비어진다면, shuffle_bag를 호출하여 블럭들의 순서를 저장합니다.
+// ------------------------------------------------------------------
 
 #define BAG_SIZE 7 // 테트로미노들의 개수
 
 typedef struct BlockQueue_{
-    int data[BAG_SIZE]; // 블록 개수
+    int data[BAG_SIZE];
     int head;
     int tail;
     int count;
@@ -49,7 +50,9 @@ static bool enqueue(BlockQueue *q, int value) {
     q->count++;
     return true;
 }
-/* 성공 여부를 bool형으로 반환합니다.*/
+/// @brief 성공 여부를 bool형으로 반환합니다.
+/// @param q bagQueue
+/// @param out 출력으로 받을 다음 블록
 static bool dequeue(BlockQueue *q, int *out) {
     if (is_empty_queue(q))
         return false;
@@ -80,7 +83,8 @@ static void shuffle_bag(void) {
         enqueue(&bagQueue, temp[i]);
     }
 }
-// ---------------------------------------------------------
+// ------------------------------------------------------------------
+
 void init_tetromino(void) {
     shuffle_bag();
     dequeue(&bagQueue, &next_block_number); // 다음 블록을 큐에서 꺼내 저장

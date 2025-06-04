@@ -88,7 +88,7 @@ void draw_tetromino(void) {
     }
 }
 void draw_next_block(void) {
-    printf("\x1b[%d;%dH", 1, 26);
+    printf("\x1b[%d;%dH", 1, 27);
     printf("Next");
     printf("\x1b[%d;%dH", 2, 22);
     printf("+------------+");
@@ -99,16 +99,12 @@ void draw_next_block(void) {
     printf("\x1b[%d;%dH", 8, 22);
     printf("+------------+");
 
-    // 2) 다음 블록 모양을 4×4 그리드로 순회하면서 출력
-    //    회전 상태는 0으로 고정(Spawn 시 모양). 필요시 다른 상태를 넣어도 됩니다.
     int next_type = next_block_number;
-    int rot = 0; // 미리보기는 회전 상태 0(= spawn 기본)으로 가정
-
+    int rotation = 0;
+    // 블록 출력
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (all_blocks[next_type][rot][row][col]) {
-                // board_row: 실제 콘솔 행 = NEXT_ROW_OFFSET + row
-                // board_col: 실제 콘솔 열 = NEXT_COL_OFFSET + col*2
+            if (all_blocks[next_type][rotation][row][col]) {
                 int board_row = 4 + row;
                 int board_col = 27 + col * 2;
                 printf("\x1b[%d;%dH", board_row, board_col);
