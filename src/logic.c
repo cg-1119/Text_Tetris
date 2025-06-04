@@ -73,7 +73,7 @@ int game_start(void)
         usleep(50000);
     }
     restore_terminal();
-    return 1;
+    return GAME_END;
 }
 
 void search_result(void)

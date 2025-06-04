@@ -22,5 +22,30 @@ void init_board(void) {
 }
 
 bool is_collision(int type, int rotation, int x, int y) {
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            if (all_blocks[type][rotation][row][col]) {
+                int board_row = y + row;
+                int board_col = x + col;
+
+                // 1) 좌, 우 벽 충돌 검사
+                if (board_col < 0 || board_col >= 10) {
+                    return true;
+                }
+                // 2) 바닥 검사
+                if (board_row >= 21) {
+                    return true;
+                }
+                // 3) 보드 위는 충돌상태가 아님
+                if (board_row < 0) {
+                    continue;
+                }
+                // 4) 다른 블록 충돌 검사
+                if (tetris_table[board_row][board_col] != 0) {
+                    return true;
+                }
+            }
+        }
+    }
     return false;
 }

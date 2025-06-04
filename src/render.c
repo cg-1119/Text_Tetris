@@ -77,9 +77,9 @@ void draw_tetromino(void) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             if (all_blocks[block_number][block_state][row][col]) {
-                int br = y + row;
-                int bc = x + col;
-                printf("\x1b[%d;%dH", br + 1, bc * 2 + 1);
+                int board_row = y + row;
+                int board_col = x + col;
+                printf("\x1b[%d;%dH", board_row + 1, board_col * 2 + 1);
                 printf("[]");
             }
         }
