@@ -10,12 +10,82 @@ int block_state       = 0;
 int x = 3, y = 0;
 int best_point = 0;
 long point     = 0;
+// ---------------------------------------------------------
+// 블록들의 순서를 저장하기 위해 큐를 사용하였습니다.
+// bagQueue에는 0에서 7까지의 숫자를 무작위로 집어넣어 다음 블록을 꺼내쓰고
+// 만약 bagQueue가 비어진다면, shuffle_bag를 호출하여 블럭들의 순서를 저장합니다.
 
+#define BAG_SIZE 7 // 테트로미노들의 개수
 
-void init_tetromino(void) {
-    next_block_number = rand() % 7;
-    spawn_new_block();
+typedef struct BlockQueue_{
+    int data[BAG_SIZE]; // 블록 개수
+    int head;
+    int tail;
+    int count;
+} BlockQueue;
+
+// 파일 내 전역변수로 사용
+static BlockQueue bagQueue;
+
+static void set_queue(BlockQueue *q) {
+    q->head = 0;
+    q->tail = 0;
+    q->count = 0;
+
 }
+static bool is_empty_queue(BlockQueue *q) {
+    return (q->count == 0);
+}
+static bool is_full_queue(BlockQueue *q) {
+    return (q->count == BAG_SIZE);
+}
+/* 성공 여부를 bool형으로 반환합니다.*/
+static bool enqueue(BlockQueue *q, int value) {
+    if (is_full_queue(q))
+        return false;
+
+    q->data[q->tail] = value;   
+    q->tail = (q->tail + 1) % BAG_SIZE;
+    q->count++;
+    return true;
+}
+/* 성공 여부를 bool형으로 반환합니다.*/
+static bool dequeue(BlockQueue *q, int *out) {
+    if (is_empty_queue(q))
+        return false;
+
+    *out = q->data[q->head];
+    q->head = (q->head + 1) % BAG_SIZE;
+    q->count--;
+    return true;
+}
+// 가방 크기만큼의 무작위 숫자 배열을 생성하여 enqueue 합니다.
+static void shuffle_bag(void) {
+    int temp[7];
+    for (int i = 0; i < BAG_SIZE; i++) {
+        temp[i] = i;
+    }
+
+    // 셔플
+    for (int i = 7 - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int t = temp[i];
+        temp[i] = temp[j];
+        temp[j] = t;
+    }
+
+    // 셔플된 순서대로 enqueue
+    set_queue(&bagQueue);
+    for (int i = 0; i < BAG_SIZE; i++) {
+        enqueue(&bagQueue, temp[i]);
+    }
+}
+// ---------------------------------------------------------
+void init_tetromino(void) {
+    shuffle_bag();
+    dequeue(&bagQueue, &next_block_number); // 다음 블록을 큐에서 꺼내 저장
+    spawn_new_block();
+}   
 
 void spawn_new_block(void) {
     block_number = next_block_number;
@@ -26,8 +96,11 @@ void spawn_new_block(void) {
     if (is_collision(block_number, block_state, x, y)) {
         game = GAME_END;
     }
-    // 다음 블록 난수
-    next_block_number = rand() % 7;
+    // 큐가 비었다면 다시 채우기
+    if (is_empty_queue(&bagQueue)) {
+        shuffle_bag();
+    }
+    dequeue(&bagQueue, &next_block_number);
 }
 
 void move_left(void) {
@@ -45,7 +118,6 @@ void move_down(void) {
         y++;
     else {
         fix_block(block_number, block_state, x, y);
-        // TODO 한 줄이 찼으면 지우는 로직 추가
         clear_full_line();   
         spawn_new_block();
     }
