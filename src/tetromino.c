@@ -32,17 +32,33 @@ void spawn_new_block(void) {
 }
 
 void move_left(void) {
-    if (!is_collision(block_number, block_state, x - 1, y)) {
+    if (!is_collision(block_number, block_state, x - 1, y))
         x--;
-    }
 }
 
 
 void move_right(void) {
-    if (!is_collision(block_number, block_state, x + 1, y)) {
+    if (!is_collision(block_number, block_state, x + 1, y))
         x++;
-    }
 }
 void move_down(void) {}
-void rotate_block(void) {}
+void rotate_block(void) {
+    int new_state = (block_state + 1) % 4;
+    if (!is_collision(block_number, new_state, x, y)) {
+        block_state = new_state;
+        return;
+    }
+    // wall kick 기능 추가
+    if (!is_collision(block_number, new_state, x - 1, y)) {
+        x = x - 1;
+        block_state = new_state;
+        return;
+    }
+    if (!is_collision(block_number, new_state, x + 1, y)) {
+        x = x + 1;
+        block_state = new_state;
+        return;
+    }
+
+}
 void drop_to_bottom(void) {}
