@@ -14,7 +14,7 @@ int display_menu(void)
 {
     int menu = 0;
 
-    while (1)
+    while (true)
     {
         system("clear");
         printf("\n\n\t\t\t\tText Tetris\n");
