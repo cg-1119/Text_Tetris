@@ -1,6 +1,10 @@
 #ifndef TETRIS_TETROMINO_H
 #define TETRIS_TETROMINO_H
 
+/**
+ * 블록 관련된 로직들을 담당합니다. (생성, 움직임)
+ */
+
 void init_tetromino(void);
 void spawn_new_block(void);
 

@@ -59,8 +59,7 @@ void fix_block(int type, int rotation, int x, int y) {
         }
     }
 }
-/// @brief 보드를 순회하면서 다 찬 라인이 있으면 클리어합니다.
-/// @return 클리어 된 라인의 수
+
 int clear_full_line(void) {
     int clear_line = 0;
     bool is_full;
