@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I. -g -O3
 DEPS = include/*.h
-SRC = board.c input.c logic.c main.c render.c tetromino.c
+SRC = board.c input.c logic.c main.c render.c tetromino.c point.c
 OBJ = $(SRC:.c=.o)
 
 %.o: %.c $(DEPS)

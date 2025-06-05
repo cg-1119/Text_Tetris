@@ -25,18 +25,7 @@ int display_menu(void)
 
     while (true)
     {
-        system("clear");
-        printf("\n\n\t\t\t\tText Tetris\n");
-        printf("\t\t\t============================\n");
-        printf("\t\t\t\tGAME MENU\n");
-        printf("\t\t\t============================\n");
-        printf("\t\t\t   1) Game Start\n");
-        printf("\t\t\t   2) Search history\n");
-        printf("\t\t\t   3) Record Output\n");
-        printf("\t\t\t   4) QUIT\n");
-        printf("\t\t\t============================\n");
-        printf("\t\t\t\t\t SELECT : ");
-
+        draw_main_menu();
         // 입력이 숫자가 아닌 경우
         if (scanf("%d", &menu) != 1) {
             // 버퍼를 비우고 continue
@@ -96,7 +85,7 @@ int game_start(void)
         }
 
 
-        draw_screen();
+        draw_game_screen();
         usleep(50000);
     }
     restore_terminal();

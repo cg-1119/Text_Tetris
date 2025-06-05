@@ -1,15 +1,17 @@
 #include "include/tetromino.h"
 #include "include/common.h"
 #include "include/board.h"
+#include "include/point.h"
 #include <stdlib.h>
 
 // 전역 변수 정의
-int block_number      = 0;
-int next_block_number = 0;
-int block_state       = 0;
+int block_number;
+int next_block_number;
+int block_state = LEFT;
 int x = 3, y = 0;
-int best_point = 0;
-long point     = 0;
+long point = 0;
+int best_point;
+
 // ------------------------------------------------------------------
 // 블록들의 순서를 저장하기 위해 큐를 사용하였습니다.
 // bagQueue에는 0에서 7까지의 숫자를 무작위로 집어넣어 다음 블록을 꺼내쓰고
@@ -27,6 +29,7 @@ typedef struct BlockQueue_{
 
 // 파일 내 전역변수로 사용
 static BlockQueue bagQueue;
+static int clear_lines;
 
 static void set_queue(BlockQueue *q) {
     q->head = 0;
@@ -122,7 +125,8 @@ void move_down(void) {
         y++;
     else {
         fix_block(block_number, block_state, x, y);
-        clear_full_line();   
+        clear_lines = clear_full_line();
+        point += point_for_line(clear_lines);
         spawn_new_block();
     }
 }
@@ -150,6 +154,7 @@ void drop_to_bottom(void) {
         y++;
     }
     fix_block(block_number, block_state, x, y);
-    clear_full_line();   
+    clear_lines = clear_full_line();
+    point += point_for_line(clear_lines);
     spawn_new_block();
 }
