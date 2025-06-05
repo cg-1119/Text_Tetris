@@ -12,4 +12,4 @@ long point_for_line(int lines);
 void save_score();
 void load_score();
 
-#endif
+#endif // SCORE_H

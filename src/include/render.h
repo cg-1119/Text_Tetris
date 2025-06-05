@@ -1,5 +1,5 @@
-#ifndef TETRIS_RENDER_H
-#define TETRIS_RENDER_H
+#ifndef RENDER_H
+#define RENDER_H
 
 /**
  * 유저 반응을 위한 화면 출력을 담당
@@ -14,4 +14,4 @@ void draw_tetromino(void);
 void draw_point(void);
 void draw_next_block(void);
 
-#endif // TETRIS_RENDER_H
+#endif // RENDER_H

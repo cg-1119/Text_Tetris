@@ -1,7 +1,8 @@
 #include "include/tetromino.h"
-#include "include/common.h"
+#include "include/config.h"
 #include "include/board.h"
 #include "include/point.h"
+
 #include <stdlib.h>
 
 // 전역 변수 정의
@@ -18,10 +19,8 @@ int best_point;
 // 만약 bagQueue가 비어진다면, shuffle_bag를 호출하여 블럭들의 순서를 저장합니다.
 // ------------------------------------------------------------------
 
-#define BAG_SIZE 7 // 테트로미노들의 개수
-
 typedef struct BlockQueue_{
-    int data[BAG_SIZE];
+    int data[TETROMINO_COUNT];
     int head;
     int tail;
     int count;
@@ -29,7 +28,6 @@ typedef struct BlockQueue_{
 
 // 파일 내 전역변수로 사용
 static BlockQueue bagQueue;
-static int clear_lines;
 
 static void set_queue(BlockQueue *q) {
     q->head = 0;
@@ -41,7 +39,7 @@ static bool is_empty_queue(BlockQueue *q) {
     return (q->count == 0);
 }
 static bool is_full_queue(BlockQueue *q) {
-    return (q->count == BAG_SIZE);
+    return (q->count == TETROMINO_COUNT);
 }
 /* 성공 여부를 bool형으로 반환합니다.*/
 static bool enqueue(BlockQueue *q, int value) {
@@ -49,7 +47,7 @@ static bool enqueue(BlockQueue *q, int value) {
         return false;
 
     q->data[q->tail] = value;   
-    q->tail = (q->tail + 1) % BAG_SIZE;
+    q->tail = (q->tail + 1) % TETROMINO_COUNT;
     q->count++;
     return true;
 }
@@ -61,14 +59,14 @@ static bool dequeue(BlockQueue *q, int *out) {
         return false;
 
     *out = q->data[q->head];
-    q->head = (q->head + 1) % BAG_SIZE;
+    q->head = (q->head + 1) % TETROMINO_COUNT;
     q->count--;
     return true;
 }
 // 가방 크기만큼의 무작위 숫자 배열을 생성하여 enqueue 합니다.
 static void shuffle_bag(void) {
     int temp[7];
-    for (int i = 0; i < BAG_SIZE; i++) {
+    for (int i = 0; i < TETROMINO_COUNT; i++) {
         temp[i] = i;
     }
 
@@ -82,7 +80,7 @@ static void shuffle_bag(void) {
 
     // 셔플된 순서대로 enqueue
     set_queue(&bagQueue);
-    for (int i = 0; i < BAG_SIZE; i++) {
+    for (int i = 0; i < TETROMINO_COUNT; i++) {
         enqueue(&bagQueue, temp[i]);
     }
 }

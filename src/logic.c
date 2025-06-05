@@ -1,15 +1,14 @@
-#include "include/common.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/time.h>
-
+#include "include/config.h"
 #include "include/board.h"
 #include "include/input.h"
 #include "include/render.h"
 #include "include/tetromino.h"
 
-int game = GAME_END;
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+
 
 // 시간 비교 헬퍼 함수
 static long time_diff_ms(struct timeval *start, struct timeval *end) {

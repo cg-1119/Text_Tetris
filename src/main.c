@@ -1,9 +1,9 @@
+#include "include/config.h"
+#include "include/logic.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-
-#include "include/common.h"
-#include "include/logic.h"
 
 int main(void)
 {

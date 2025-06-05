@@ -1,5 +1,5 @@
-#ifndef TETRIS_TETROMINO_H
-#define TETRIS_TETROMINO_H
+#ifndef TETROMINO_H
+#define TETROMINO_H
 
 /**
  * 블록 관련된 로직들을 담당합니다. (생성, 움직임)
@@ -14,4 +14,4 @@ void move_down(void);
 void rotate_block(void);
 void drop_to_bottom(void);
 
-#endif // TETRIS_TETROMINO_H
+#endif // TETROMINO_H

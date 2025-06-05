@@ -1,7 +1,5 @@
 #include "include/board.h"
-#include "include/common.h"
-
-char tetris_table[21][10];
+#include "include/config.h"
 
 void init_board(void) {
     int row, col;
@@ -20,10 +18,10 @@ void init_board(void) {
         tetris_table[20][col] = 1;
     }
 }
-bool is_collision(int type, int rotation, int x, int y) {
+bool is_collision(TetrominoType type, int rotation, int x, int y) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (all_blocks[type][rotation][row][col]) {
+            if (tetrominos[type][rotation][row][col]) {
                 int board_row = y + row;
                 int board_col = x + col;
 
@@ -45,10 +43,10 @@ bool is_collision(int type, int rotation, int x, int y) {
     return false;
 }
 
-void fix_block(int type, int rotation, int x, int y) {
+void fix_block(TetrominoType type, int rotation, int x, int y) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (all_blocks[type][rotation][row][col]) {
+            if (tetrominos[type][rotation][row][col]) {
                 int board_row = y + row;
                 int board_col = x + col;
                 // 유효한 공간에 존재하면 블럭 고정
