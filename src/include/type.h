@@ -13,7 +13,7 @@ typedef enum {
     BLOCK_Z,
     BLOCK_J,
     BLOCK_L
-} TetrominoType;
+} Tetromino;
 
 // 게임 결과 저장용 구조체
 typedef struct {

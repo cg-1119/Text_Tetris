@@ -1,5 +1,6 @@
 #include "include/render.h"
 #include "include/config.h"
+#include "include/type.h"
 
 #include <stdio.h>
 
@@ -34,7 +35,7 @@ void draw_game_screen(void) {
 void draw_board(void) {
     for (int row = 0; row < 21; row++) {
         for (int col = 0; col < 10; col++) {
-            if (tetris_table[row][col] == 1) {
+            if (tetris_board[row][col] == 1) {
                 printf("[]");
             } else {
                 printf("  ");
@@ -46,7 +47,7 @@ void draw_board(void) {
 void draw_tetromino(void) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (tetrominos[block_number][block_state][row][col]) {
+            if (tetrominos[current_block][block_state][row][col]) {
                 int board_row = y + row;
                 int board_col = x + col;
                 printf("\x1b[%d;%dH", board_row + 1, board_col * 2 + 1);
@@ -74,7 +75,7 @@ void draw_next_block(void) {
     printf("\x1b[%d;%dH", 12, 22);
     printf("+------------+");
 
-    int next_type = next_block_number;
+    int next_type = next_block;
     int rotation = 0;
     // 블록 출력
     for (int row = 0; row < 4; row++) {

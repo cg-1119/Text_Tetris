@@ -3,6 +3,7 @@
         "*.embeddedhtml": "html",
         "*.html": "php",
         "tetromino.h": "c",
-        "render.h": "c"
+        "render.h": "c",
+        "config.h": "c"
     }
 }

@@ -29,11 +29,11 @@
 // ----------------------------------------------------------
 // 전역 변수
 
-extern char tetris_table[BOARD_ROWS][BOARD_COLS]; // 테이블
+extern char tetris_board[BOARD_ROWS][BOARD_COLS]; // 테이블
 extern char (*tetrominos[TETROMINO_COUNT])[4][4]; // 테트로미노 집합
 
-extern TetrominoType block_number;       // 블록 번호
-extern TetrominoType next_block_number;  // 다음 블록 번호
+extern Tetromino current_block;       // 블록 번호
+extern Tetromino next_block;  // 다음 블록 번호
 extern int block_state;        // 블록 상태
 
 // 블록 위치
