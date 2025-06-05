@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-char tetris_board[BOARD_ROWS][BOARD_COLS];
+char tetris_table[TABLE_ROWS][TABLE_COLS];
 
 char i_block[4][4][4] = {
     { {0,0,1,0}, {0,0,1,0}, {0,0,1,0}, {0,0,1,0} },
@@ -51,8 +51,8 @@ char (*tetrominos[TETROMINO_COUNT])[4][4] = {
     i_block, t_block, s_block, z_block, l_block, j_block, o_block
 };
 
-Tetromino current_block;
-Tetromino next_block;
+Tetromino block_number;
+Tetromino next_block_number;
 int block_state = 0;
 int x = 3;
 int y = 0;

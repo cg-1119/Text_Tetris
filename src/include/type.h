@@ -5,6 +5,7 @@
  * 구조체들의 집합
  */
 
+ // 테트리스 번호들을 enum으로 선언
 typedef enum {
     BLOCK_I,
     BLOCK_O,

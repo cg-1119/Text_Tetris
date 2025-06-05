@@ -1,40 +1,40 @@
-#include "include/board.h"
+#include "include/table.h"
 #include "include/config.h"
 
-void init_board(void) {
+void init_table(void) {
     int row, col;
-    for (row = 0; row < BOARD_ROWS; row++) {
+    for (row = 0; row < TABLE_ROWS; row++) {
         for (col = 0; col < 10; col++) {
-            tetris_board[row][col] = 0;
+            tetris_table[row][col] = 0;
         }
     }
     // 좌우 벽
-    for (row = 2; row < BOARD_ROWS; row++) {
-        tetris_board[row][0] = 1;
-        tetris_board[row][9] = 1;
+    for (row = 2; row < TABLE_ROWS; row++) {
+        tetris_table[row][0] = 1;
+        tetris_table[row][9] = 1;
     }
     // 벽, 바닥
-    for (col = 0; col < BOARD_COLS; col++) {
-        tetris_board[20][col] = 1;
+    for (col = 0; col < TABLE_COLS; col++) {
+        tetris_table[20][col] = 1;
     }
 }
 bool is_collision(Tetromino type, int rotation, int x, int y) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             if (tetrominos[type][rotation][row][col]) {
-                int board_row = y + row;
-                int board_col = x + col;
+                int table_row = y + row;
+                int table_col = x + col;
 
                 // 1) 좌, 우 벽 충돌 검사
-                if (board_col < 1 || board_col >= 9) {
+                if (table_col < 1 || table_col >= 9) {
                     return true;
                 }
                 // 2) 바닥 검사
-                if (board_row >= 20) {
+                if (table_row >= 20) {
                     return true;
                 }
                 // 3) 다른 블록 충돌 검사
-                if (tetris_board[board_row][board_col] != 0) {
+                if (tetris_table[table_row][table_col] != 0) {
                     return true;
                 }
             }
@@ -51,7 +51,7 @@ void fix_block(Tetromino type, int rotation, int x, int y) {
                 int board_col = x + col;
                 // 유효한 공간에 존재하면 블럭 고정
                 if (board_row >= 0 && board_row < 21 && board_col >= 0 && board_col < 10) {
-                    tetris_board[board_row][board_col] = 1;
+                    tetris_table[board_row][board_col] = 1;
                 }
             }
         }
@@ -61,10 +61,10 @@ void fix_block(Tetromino type, int rotation, int x, int y) {
 int clear_full_line(void) {
     int clear_line = 0;
     bool is_full;
-    for (int row = BOARD_ROWS - 2; row >= 2; row--) {
+    for (int row = TABLE_ROWS - 2; row >= 2; row--) {
         is_full = true;
         for (int col = 1; col < 9; col++) {
-            if (tetris_board[row][col] != 1){
+            if (tetris_table[row][col] != 1){
                 is_full = false;
                 break;
             }
@@ -74,7 +74,7 @@ int clear_full_line(void) {
             clear_line++;
             for (int r = row; r >= 1; r--) {
                 for (int c = 1; c < 9; c++) {
-                    tetris_board[r][c] = tetris_board[r - 1][c];
+                    tetris_table[r][c] = tetris_table[r - 1][c];
 
                 }
             }

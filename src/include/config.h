@@ -19,9 +19,9 @@
 #define GAME_START 0
 #define GAME_END   1
 
-// 보드 크기
-#define BOARD_ROWS 21
-#define BOARD_COLS 10
+// 테이블 크기
+#define TABLE_ROWS 21
+#define TABLE_COLS 10
 
 // 테트로미노 개수
 #define TETROMINO_COUNT 7
@@ -29,12 +29,14 @@
 // ----------------------------------------------------------
 // 전역 변수
 
-extern char tetris_board[BOARD_ROWS][BOARD_COLS]; // 테이블
+extern char tetris_table[TABLE_ROWS][TABLE_COLS]; // 테이블
 extern char (*tetrominos[TETROMINO_COUNT])[4][4]; // 테트로미노 집합
 
-extern Tetromino current_block;       // 블록 번호
-extern Tetromino next_block;  // 다음 블록 번호
-extern int block_state;        // 블록 상태
+// block_number와 next_block_number의 자료형을 Tetromino로 변경하였습니다.
+
+extern Tetromino block_number; // 블록 번호
+extern Tetromino next_block_number;  // 다음 블록 번호
+extern int block_state; // 블록 상태
 
 // 블록 위치
 extern int x;

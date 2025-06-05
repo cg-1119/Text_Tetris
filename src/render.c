@@ -35,7 +35,7 @@ void draw_game_screen(void) {
 void draw_board(void) {
     for (int row = 0; row < 21; row++) {
         for (int col = 0; col < 10; col++) {
-            if (tetris_board[row][col] == 1) {
+            if (tetris_table[row][col] == 1) {
                 printf("[]");
             } else {
                 printf("  ");
@@ -47,10 +47,10 @@ void draw_board(void) {
 void draw_tetromino(void) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (tetrominos[current_block][block_state][row][col]) {
-                int board_row = y + row;
-                int board_col = x + col;
-                printf("\x1b[%d;%dH", board_row + 1, board_col * 2 + 1);
+            if (tetrominos[block_number][block_state][row][col]) {
+                int table_row = y + row;
+                int table_col = x + col;
+                printf("\x1b[%d;%dH", table_row + 1, table_col * 2 + 1);
                 printf("[]");
             }
         }
@@ -75,15 +75,15 @@ void draw_next_block(void) {
     printf("\x1b[%d;%dH", 12, 22);
     printf("+------------+");
 
-    int next_type = next_block;
+    int next_type = next_block_number;
     int rotation = 0;
     // 블록 출력
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             if (tetrominos[next_type][rotation][row][col]) {
-                int board_row = 8 + row;
-                int board_col = 27 + col * 2;
-                printf("\x1b[%d;%dH", board_row, board_col);
+                int table_row = 8 + row;
+                int table_col = 27 + col * 2;
+                printf("\x1b[%d;%dH", table_row, table_col);
                 printf("[]");
             }
         }

@@ -1,6 +1,6 @@
 #include "include/tetromino.h"
 #include "include/config.h"
-#include "include/board.h"
+#include "include/table.h"
 #include "include/point.h"
 
 #include <stdlib.h>
@@ -80,41 +80,41 @@ static void shuffle_bag(void) {
 
 void init_tetromino(void) {
     shuffle_bag();
-    dequeue(&bagQueue, &next_block); // 다음 블록을 큐에서 꺼내 저장
+    dequeue(&bagQueue, &next_block_number); // 다음 블록을 큐에서 꺼내 저장
     spawn_new_block();
 }   
 
 void spawn_new_block(void) {
-    current_block = next_block;
+    block_number = next_block_number;
     block_state  = LEFT; // 초기 회전 상태
     x = 3; y = 0; // 초기 위치
 
     // 스폰 시 충돌이 일어나면 게임 종료
-    if (is_collision(current_block, block_state, x, y)) {
+    if (is_collision(block_number, block_state, x, y)) {
         game = GAME_END;
     }
     // 큐가 비었다면 다시 채우기
     if (is_empty_queue(&bagQueue)) {
         shuffle_bag();
     }
-    dequeue(&bagQueue, &next_block);
+    dequeue(&bagQueue, &next_block_number);
 }
 
 void move_left(void) {
-    if (!is_collision(current_block, block_state, x - 1, y))
+    if (!is_collision(block_number, block_state, x - 1, y))
         x--;
 }
 
 
 void move_right(void) {
-    if (!is_collision(current_block, block_state, x + 1, y))
+    if (!is_collision(block_number, block_state, x + 1, y))
         x++;
 }
 void move_down(void) {
-    if (!is_collision(current_block, block_state, x, y + 1))
+    if (!is_collision(block_number, block_state, x, y + 1))
         y++;
     else {
-        fix_block(current_block, block_state, x, y);
+        fix_block(block_number, block_state, x, y);
         clear_lines = clear_full_line();
         point += point_for_line(clear_lines);
         spawn_new_block();
@@ -122,17 +122,17 @@ void move_down(void) {
 }
 void rotate_block(void) {
     int new_state = (block_state + 1) % 4;
-    if (!is_collision(current_block, new_state, x, y)) {
+    if (!is_collision(block_number, new_state, x, y)) {
         block_state = new_state;
         return;
     }
     // wall kick 기능 추가 (x 축만)
-    if (!is_collision(current_block, new_state, x - 1, y)) {
+    if (!is_collision(block_number, new_state, x - 1, y)) {
         x = x - 1;
         block_state = new_state;
         return;
     }
-    if (!is_collision(current_block, new_state, x + 1, y)) {
+    if (!is_collision(block_number, new_state, x + 1, y)) {
         x = x + 1;
         block_state = new_state;
         return;
@@ -140,10 +140,10 @@ void rotate_block(void) {
 
 }
 void drop_to_bottom(void) {
-    while (!is_collision(current_block, block_state, x, y + 1)) {
+    while (!is_collision(block_number, block_state, x, y + 1)) {
         y++;
     }
-    fix_block(current_block, block_state, x, y);
+    fix_block(block_number, block_state, x, y);
     clear_lines = clear_full_line();
     point += point_for_line(clear_lines);
     spawn_new_block();

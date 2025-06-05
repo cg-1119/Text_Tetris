@@ -1,5 +1,5 @@
 #include "include/config.h"
-#include "include/board.h"
+#include "include/table.h"
 #include "include/input.h"
 #include "include/render.h"
 #include "include/tetromino.h"
@@ -45,7 +45,7 @@ int display_menu(void)
 int game_start(void)
 {
     setup_terminal();
-    init_board();
+    init_table();
     init_tetromino();
 
     const long drop_ms = 500; // 블록 자동으로 떨어지는 간격 = 0.5초
