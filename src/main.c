@@ -1,5 +1,7 @@
 #include "include/config.h"
 #include "include/logic.h"
+#include "include/render.h"
+#include "include/point.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -15,6 +17,14 @@ int main(void)
 	*/
 	printf("\x1b[?1049h\x1b[?7l");
 	srand((unsigned)time(NULL));
+
+	ExceptionCode exception;
+    // load_point 에러처리
+    if (load_point() == SAVE_FILE_EXCEPTION) {
+        draw_savefile_exception_message();
+		getchar();
+        exit(EXIT_FAILURE);
+    }
 
 	int menu = 1;
 
@@ -33,8 +43,9 @@ int main(void)
 		else if (menu == 3)
 			print_result();
 
-		else if (menu == 4)
+		else if (menu == 4) {
 			break;
+		}
 	}
 
 	//Restore screen buffer(1049l), Enable auto-wrap mode(7h)

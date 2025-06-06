@@ -23,13 +23,6 @@ static long time_diff_ms(struct timeval *start, struct timeval *end) {
 int display_menu(void)
 {
     int menu = 0;
-    ExceptionCode exception;
-    // load_point 에러처리
-    if (load_point() == SAVE_FILE_EXCEPTION) {
-        draw_savefile_exception_message();
-        getchar();
-        exit(EXIT_FAILURE);
-    }
  
     while (true)
     {
@@ -128,5 +121,41 @@ void search_result(void)
 
 void print_result(void)
 {
-    /* TODO: 모든 기록 출력 로직 구현 (빈 틀) */
+    setup_terminal();
+    int total_pages = (list_length + 4) / 5;
+    if (total_pages == 0) {
+        restore_terminal();
+        printf("No search game record.\n");
+        printf("Press Enter key to exit program.");
+        getchar();
+        return;
+    }
+    int current_page = 0;
+    draw_record_page(current_page);
+
+    while (true) {
+        int key = get_key();
+        if (!key) {
+            // 키 입력이 없으면 loop를 잠깐 쉬었다가 다시 확인
+            usleep(50 * 1000); // 50ms 정도
+            continue;
+        }
+
+        if (key == 'l' || key == 'L') {
+            // 다음 페이지로 (마지막이 아니면)
+            if (current_page < total_pages - 1) {
+                current_page++;
+                draw_record_page(current_page);
+            }
+        }
+        else if (key == 'j' || key == 'J') {
+            // 이전 페이지로 (첫 페이지가 아니면)
+            if (current_page > 0) {
+                current_page--;
+                draw_record_page(current_page);
+            }
+        }
+        else if (key == 'p' || key == 'P') break;
+    }
+    restore_terminal();
 }

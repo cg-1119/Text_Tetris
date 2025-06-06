@@ -66,6 +66,8 @@ int clear_lines = 0;
 
 ResultList result_list = NULL;
 
+int list_length = 0;
+
 char *filename = "points.txt";
 
 

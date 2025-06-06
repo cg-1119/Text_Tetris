@@ -39,28 +39,29 @@ bool save_point(char* name) {
     result.day   = lt->tm_mday;
     result.hour  = lt->tm_hour;
     result.min   = lt->tm_min;
-    fprintf(fp, "%s %ld %04d %02d %02d %02d %02d %02d\n",
+    fprintf(fp, "%29s %ld %04d %02d %02d %02d %02d %03d\n",
             result.name, result.point, result.year, result.month, result.day, result.hour, result.min, result.rank);
     fclose(fp);
-
+    return true;
 }
 bool load_point() {
     FILE *fp = fopen(filename, "r");
-    if (!fp)
+    if (!fp) {
         fp = fopen(filename, "w+");
         return true;
+    }
     
    while (true) {
         Result result;
         int scanned = fscanf(fp,
-            "%s %ld %d %d %d %d %d %d\n",
+            "%29s %ld %04d %02d %02d %02d %02d %03d\n",
             result.name,
             &result.point,
             &result.year, &result.month, &result.day,
             &result.hour, &result.min,
             &result.rank);
         // 스캔된 것이 없으면 종료
-        if (scanned == 0) {
+        if (scanned == EOF) {
             break;
         }
         else if (scanned != 8) {
@@ -69,13 +70,13 @@ bool load_point() {
         Node* new_node = make_node(&result);
         if (result_list == NULL) result_list = new_node;
         else {
-            Node* tmp = (Node*)result_list;
-            while (true) {
-                if (tmp->next != NULL)
-                    tmp = tmp->next;
+            Node* tmp = result_list;
+            while (tmp->next != NULL) {
+                tmp = tmp->next;
             }
             tmp->next = new_node;
         }
+        list_length++;
     }
     fclose(fp);
     return true;

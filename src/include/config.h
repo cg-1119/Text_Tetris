@@ -58,12 +58,12 @@ extern char *filename; // 파일 이름
 
 // 포인트 정보들을 위한 list
 extern ResultList result_list;
+extern int list_length; // 리스트 길이
 
 // --------------------------------------------
 // ResultList를 위한 기능
 // 노드 생성
 Node* make_node(Result *result);
-
 // result_list 메모리 free
 void free_list();
 // --------------------------------------------
