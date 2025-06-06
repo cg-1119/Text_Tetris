@@ -104,3 +104,51 @@ void draw_savefile_exception_message(void) {
     printf("Unable to load save file. Please delete ‘points.txt’ and restart the application\n");
     printf("Press Enter key to exit program.");
 }
+
+
+void draw_record_page(int page_index) {
+    printf("\x1b[2J");
+    printf("\x1b[H");
+
+    // 총 페이지 수 보여주기
+    int total_pages = (list_length + 4) / 5;
+    printf("==== Game Results (Page %d of %d, Total %d to %d of %d) ====\n\n",
+           page_index + 1,
+           total_pages,
+           list_length,
+           page_index * 5 + 1,
+           (page_index * 5 + 5 < list_length ? page_index * 5 + 5 : list_length));
+
+    printf("%-4s %-20s %-8s %-16s\n",
+           "Rank", "Name", "Point", "Date-Time");
+    printf("--------------------------------------------------------\n");
+
+    // page_index * 5 만큼 건너뛴 뒤, 최대 5개를 출력
+    Node *cur = result_list;
+    int to_skip = page_index * 5;
+    for (int i = 0; i < to_skip && cur; i++) {
+        cur = cur->next;
+    }
+
+    int printed = 0;
+    int seq_num = page_index * 5 + 1;
+    while (cur && printed < 5) {
+        Result *r = &cur->data;
+        printf("%-4d %-20s %-8ld %04d-%02d-%02d %02d:%02d\n",
+               seq_num,
+               r->name,
+               r->point,
+               r->year, r->month, r->day,
+               r->hour, r->min);
+        printed++;
+        seq_num++;
+        cur = cur->next;
+    }
+
+    if (printed == 0) {
+        printf("\t[No results to display on this page]\n");
+    }
+
+    printf("\n[j] Previous Page    [l] Next Page    [p] Quit\n");
+    fflush(stdout);
+}

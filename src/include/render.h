@@ -19,4 +19,6 @@ void draw_game_over(void);
 // 예기치 않은 오류가 발생하면 출력
 void draw_savefile_exception_message(void);
 
+void draw_record_page(int page_index);
+
 #endif // RENDER_H
