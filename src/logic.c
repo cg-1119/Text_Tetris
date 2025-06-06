@@ -91,6 +91,13 @@ int game_start(void)
     }
     restore_terminal();
     draw_game_over();
+    // 0 포인트는 기록 미지원
+    if (!point) {
+         int ch;
+        while ((ch = getchar()) != '\n' && ch != EOF) {}
+        getchar();
+        return GAME_END;
+    }
     // 커서를 적절한 위치로 옮김
     printf("\x1b[%d;%dH", 11, 22);
     fflush(stdout);
@@ -100,6 +107,7 @@ int game_start(void)
     // 버퍼 비우기
     while ((ch = getchar()) != '\n' && ch != EOF) {}
 
+    // 이름이 입력되지 않으면 Anonymous로 저장
     if (fgets(name, sizeof(name), stdin) != NULL) {
         // fgets는 맨 끝에 \n을 포함하기 때문에 제거
         name[strcspn(name, "\n")] = '\0';
@@ -109,7 +117,7 @@ int game_start(void)
     } else {
         strcpy(name, "Anonymous");
     }
-    save_point(name);
+    save_point_to_list(name);
     fflush(stdout);
     return GAME_END;
 }

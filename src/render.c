@@ -94,8 +94,13 @@ void draw_game_over(void) {
     printf("+==============================+\n");
     printf("|           Game Over          |\n");       
     printf("+==============================+\n");
-    printf("|        your point: %ld         |\n", point);
-    printf("|   Input your name:           |\n");
+    printf("|        your point: %-5ld     |\n", point);
+    if (!point) {
+        printf("|0 points do not support record|\n");
+        printf("|Press Enter key to exit game. |\n");
+    }
+    else
+        printf("|   Input your name:           |\n");
     printf("+==============================+");
     fflush(stdout);
 }
