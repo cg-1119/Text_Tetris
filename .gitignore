@@ -9,6 +9,7 @@
 *.log
 *.log.*
 tetris
+*.txt
 
 # MacOS 메타데이터
 .DS_Store
