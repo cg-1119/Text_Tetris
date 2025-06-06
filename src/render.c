@@ -76,11 +76,10 @@ void draw_next_block(void) {
     printf("+------------+");
 
     int next_type = next_block_number;
-    int rotation = 0;
     // 블록 출력
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (tetrominos[next_type][rotation][row][col]) {
+            if (tetrominos[next_type][block_state][row][col]) {
                 int table_row = 8 + row;
                 int table_col = 27 + col * 2;
                 printf("\x1b[%d;%dH", table_row, table_col);
@@ -88,4 +87,15 @@ void draw_next_block(void) {
             }
         }
     }
+}
+
+void draw_game_over(void) {
+    printf("\x1b[%d;%dH", 7, 1);
+    printf("+==============================+\n");
+    printf("|           Game Over          |\n");       
+    printf("+==============================+\n");
+    printf("|        your point: %ld         |\n", point);
+    printf("|   Input your name:           |\n");
+    printf("+==============================+");
+    fflush(stdout);
 }

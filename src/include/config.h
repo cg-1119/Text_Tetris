@@ -2,6 +2,8 @@
 #define CONFIG_H
 
 #include "type.h"
+#include <stdlib.h>
+#include <stdbool.h>
 
 /*  
 * 공통으로 쓰이는 매크로, 전역 변수 들의 모음
@@ -50,5 +52,19 @@ extern int best_point;
 extern long point;
 
 extern int clear_lines; // 클리어된 라인 수
+
+extern char *filename; // 파일 이름
+
+// 포인트 정보들을 위한 list
+extern ResultList result_list;
+
+// --------------------------------------------
+// ResultList를 위한 기능
+// 노드 생성
+Node* make_node(Result *result);
+
+// result_list 메모리 free
+void free_list();
+// --------------------------------------------
 
 #endif // CONFIG_H

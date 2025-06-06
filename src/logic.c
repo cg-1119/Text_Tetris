@@ -3,11 +3,13 @@
 #include "include/input.h"
 #include "include/render.h"
 #include "include/tetromino.h"
+#include "include/point.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <string.h>
 
 
 // 시간 비교 헬퍼 함수
@@ -21,6 +23,7 @@ static long time_diff_ms(struct timeval *start, struct timeval *end) {
 int display_menu(void)
 {
     int menu = 0;
+    load_point();
 
     while (true)
     {
@@ -88,6 +91,27 @@ int game_start(void)
         usleep(50000);
     }
     restore_terminal();
+    draw_game_over();
+    // 커서를 적절한 위치로 옮김
+    printf("\x1b[%d;%dH", 11, 22);
+    fflush(stdout);
+
+    char name[30];
+    int ch;
+    // 버퍼 비우기
+    while ((ch = getchar()) != '\n' && ch != EOF) {}
+
+    if (fgets(name, sizeof(name), stdin) != NULL) {
+        // fgets는 맨 끝에 \n을 포함하기 때문에 제거
+        name[strcspn(name, "\n")] = '\0';
+        if (name[0] == '\0') {
+            strcpy(name, "Anonymous");
+        }
+    } else {
+        strcpy(name, "Anonymous");
+    }
+    save_point(name);
+    fflush(stdout);
     return GAME_END;
 }
 

@@ -4,6 +4,7 @@
         "*.html": "php",
         "tetromino.h": "c",
         "render.h": "c",
-        "config.h": "c"
+        "config.h": "c",
+        "point.h": "c"
     }
 }

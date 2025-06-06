@@ -1,5 +1,4 @@
 #include "include/config.h"
-#include <stdlib.h>
 #include <time.h>
 
 char tetris_table[TABLE_ROWS][TABLE_COLS];
@@ -64,3 +63,26 @@ long point = 0;
 int best_point;
 
 int clear_lines = 0;
+
+ResultList result_list = NULL;
+
+char *filename = "points.txt";
+
+
+Node* make_node(Result *result) {
+    Node *tmp = malloc(sizeof(Node));
+    if (!tmp) return NULL;
+    memcpy(&tmp->data, result, sizeof(Result));
+    tmp->next = NULL;
+    return tmp;
+}
+
+void free_list() {
+    Node *curr = result_list;
+    while (curr) {
+        Node *next = curr->next;
+        free(curr);
+        curr = next;
+    }
+    result_list = NULL;
+}

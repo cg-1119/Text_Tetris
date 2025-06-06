@@ -14,4 +14,5 @@ void draw_tetromino(void);
 void draw_point(void);
 void draw_next_block(void);
 
+void draw_game_over(void);
 #endif // RENDER_H
