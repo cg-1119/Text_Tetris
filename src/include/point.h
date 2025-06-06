@@ -11,7 +11,7 @@
 /// @param lines 부서진 라인 수
 /// @return 부서진 라인에 해당하는 점수
 long point_for_line(int lines);
-void save_point(char *name);
+bool save_point(char *name);
 /// @brief 포인트 정보를 불러옵니다
 /// @return 성공 여부의 boolean
 bool load_point();
