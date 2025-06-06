@@ -17,10 +17,8 @@ long point_for_line(int lines) {
     }
 }
 
-bool save_point(char* name) {
-    if (!name) return true; // 이름이 없으면 저장하지 않고 종료
-
-    // 게임 실행 시 파일을 생성하므로 없으면 SAVE_FILE_EXCEPTION
+bool save_point_to_list(char* name) {
+    // 파일이 없어도 게임 실행 시 파일을 생성하므로 없으면 SAVE_FILE_EXCEPTION
     FILE *fp = fopen(filename, "r");
     if (!fp)
         return false;
@@ -39,11 +37,56 @@ bool save_point(char* name) {
     result.day   = lt->tm_mday;
     result.hour  = lt->tm_hour;
     result.min   = lt->tm_min;
-    fprintf(fp, "%29s %ld %04d %02d %02d %02d %02d %03d\n",
-            result.name, result.point, result.year, result.month, result.day, result.hour, result.min, result.rank);
-    fclose(fp);
+
+    Node *new_node = make_node(&result);
+
+    if (result_list == NULL) {
+        result.rank = 1;
+        result_list = new_node;
+    }
+    else {
+        Node *prev = result_list;
+        Node *curr = result_list->next;
+        while(curr != NULL && curr->data.point >= result.point) {
+            prev = curr;
+            curr = curr->next;
+        }
+        if (curr != NULL) 
+            new_node->data.rank = curr->data.rank;
+        else
+             new_node->data.rank = prev->data.rank + 1;
+
+        prev->next = new_node;
+        new_node->next = curr;
+        // 뒤의 랭킹들을 갱신
+        while (curr) {
+            curr->data.rank += 1;
+            curr = curr->next;
+        }
+    }
+    list_length++;
     return true;
 }
+
+void save_point_to_file(void) {
+    FILE *fp = fopen(filename, "w");
+    if (!fp) {
+        perror("points.txt 열기 실패");
+        return;
+    }
+    Node *tmp = result_list;
+    for (int i = 0; i < list_length; i++) {
+        Result *r = &tmp->data;
+        fprintf(fp, "%s %ld %04d %02d %02d %02d %02d %03d\n",
+                r->name,
+                r->point,
+                r->year, r->month, r->day,
+                r->hour, r->min,
+                r->rank);
+        tmp = tmp->next;
+    }
+}
+
 bool load_point() {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
@@ -67,7 +110,7 @@ bool load_point() {
         else if (scanned != 8) {
             return false;
         }
-        Node* new_node = make_node(&result);
+        Node *new_node = make_node(&result);
         if (result_list == NULL) result_list = new_node;
         else {
             Node* tmp = result_list;

@@ -44,6 +44,8 @@ int main(void)
 			print_result();
 
 		else if (menu == 4) {
+			save_point_to_file();
+			free_list();
 			break;
 		}
 	}

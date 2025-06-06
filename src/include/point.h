@@ -11,8 +11,16 @@
 /// @param lines 부서진 라인 수
 /// @return 부서진 라인에 해당하는 점수
 long point_for_line(int lines);
-bool save_point(char *name);
-/// @brief 포인트 정보를 불러옵니다
+
+/// @brief result_list에 게임 정보를 저장합니다,
+/// @param name 저장 할 이름, 만약 입력이 안 들어오면 그대로 종료.
+/// @return 성공 여부의 boolean
+bool save_point_to_list(char *name);
+
+// 게임 종료 시 파일에 포인트 정보를 저장합니다.
+void save_point_to_file(void);
+
+/// @brief 포인트 정보를 불러옵니다 만약 불러오기를 실패한다면 예외를 일으킵니다.
 /// @return 성공 여부의 boolean
 bool load_point();
 
