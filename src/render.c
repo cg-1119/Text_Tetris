@@ -79,7 +79,7 @@ void draw_next_block(void) {
     // 블록 출력
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
-            if (tetrominos[next_type][block_state][row][col]) {
+            if (tetrominos[next_type][LEFT][row][col]) {
                 int table_row = 8 + row;
                 int table_col = 27 + col * 2;
                 printf("\x1b[%d;%dH", table_row, table_col);
