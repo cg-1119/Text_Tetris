@@ -23,8 +23,14 @@ static long time_diff_ms(struct timeval *start, struct timeval *end) {
 int display_menu(void)
 {
     int menu = 0;
-    load_point();
-
+    ExceptionCode exception;
+    // load_point 에러처리
+    if (load_point() == SAVE_FILE_EXCEPTION) {
+        draw_savefile_exception_message();
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+ 
     while (true)
     {
         draw_main_menu();

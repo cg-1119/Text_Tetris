@@ -15,4 +15,8 @@ void draw_point(void);
 void draw_next_block(void);
 
 void draw_game_over(void);
+
+// 예기치 않은 오류가 발생하면 출력
+void draw_savefile_exception_message(void);
+
 #endif // RENDER_H

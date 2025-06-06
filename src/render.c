@@ -99,3 +99,8 @@ void draw_game_over(void) {
     printf("+==============================+");
     fflush(stdout);
 }
+
+void draw_savefile_exception_message(void) {
+    printf("Unable to load save file. Please delete ‘points.txt’ and restart the application\n");
+    printf("Press Enter key to exit program.");
+}

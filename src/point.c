@@ -17,8 +17,13 @@ long point_for_line(int lines) {
     }
 }
 
-void save_point(char* name) {
-    if (!name) return; // 이름이 없으면 종료
+bool save_point(char* name) {
+    if (!name) return true; // 이름이 없으면 저장하지 않고 종료
+
+    // 게임 실행 시 파일을 생성하므로 없으면 SAVE_FILE_EXCEPTION
+    FILE *fp = fopen(filename, "r");
+    if (!fp)
+        return false;
 
     time_t t = time(NULL);
     struct tm *lt = localtime(&t);
@@ -34,33 +39,21 @@ void save_point(char* name) {
     result.day   = lt->tm_mday;
     result.hour  = lt->tm_hour;
     result.min   = lt->tm_min;
-
-    FILE *fp = fopen(filename, "r");
-    if (!fp) {
-        fp = fopen(filename, "w+");
-        result.rank = 1;
-        if (!fp) {
-            perror("point.txt 생성 실패");
-            return;
-        }
-    }
-    else {
-        
-    }
     fprintf(fp, "%s %ld %04d %02d %02d %02d %02d %02d\n",
             result.name, result.point, result.year, result.month, result.day, result.hour, result.min, result.rank);
     fclose(fp);
 
 }
 bool load_point() {
-    FILE *fp = fopen(filename, &result_list);
+    FILE *fp = fopen(filename, "r");
     if (!fp)
-        return false;
+        fp = fopen(filename, "w+");
+        return true;
     
    while (true) {
         Result result;
         int scanned = fscanf(fp,
-            "%s %ld %d %d %d %d %d\n",
+            "%s %ld %d %d %d %d %d %d\n",
             result.name,
             &result.point,
             &result.year, &result.month, &result.day,
@@ -74,9 +67,9 @@ bool load_point() {
             return false;
         }
         Node* new_node = make_node(&result);
-        if (result_list = NULL) result_list = new_node;
+        if (result_list == NULL) result_list = new_node;
         else {
-            Node* tmp = result_list;
+            Node* tmp = (Node*)result_list;
             while (true) {
                 if (tmp->next != NULL)
                     tmp = tmp->next;

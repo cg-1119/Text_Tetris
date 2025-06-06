@@ -78,11 +78,11 @@ Node* make_node(Result *result) {
 }
 
 void free_list() {
-    Node *curr = result_list;
-    while (curr) {
-        Node *next = curr->next;
-        free(curr);
-        curr = next;
+    Node *tmp = result_list;
+    while (tmp ->next != NULL) {
+        Node *next = tmp->next;
+        free(tmp);
+        tmp = next;
     }
     result_list = NULL;
 }

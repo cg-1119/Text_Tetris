@@ -29,12 +29,16 @@ typedef struct {
 } Result;
 
 // 게임 결과 저장의 자료구조를 linked list로 설정
-typedef struct {
+typedef struct Node_{
     Result data;
-    struct Node *next;
+    struct Node_ *next;
 } Node;
 
 // head부분을 ResultList로 명명
 typedef Node* ResultList;
+
+typedef enum {
+    SAVE_FILE_EXCEPTION
+} ExceptionCode;
 
 #endif // TYPE_H
