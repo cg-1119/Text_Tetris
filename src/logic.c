@@ -115,6 +115,8 @@ int game_start(void)
         save_point_to_list(name);
         save_point_to_file();
     }
+    else // 포인트 초기화
+        point = 0;
     
 
     fflush(stdout);

@@ -101,7 +101,7 @@ void draw_game_over(void) {
     printf("+==============================+\n");
     printf("|        your point: %-5ld     |\n", point);
     if (!point) {
-        printf("|0 points do not support record|\n");
+        printf("|0 point do not support record |\n");
         printf("|Press Enter key to exit game. |\n");
     }
     else
