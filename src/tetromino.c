@@ -117,6 +117,9 @@ void move_down(void) {
         fix_block(block_number, block_state, x, y);
         clear_lines = clear_full_line();
         point += point_for_line(clear_lines);
+        // 최고 점수 갱신
+        if (point > best_point)
+            best_point = point;
         spawn_new_block();
     }
 }
@@ -146,5 +149,8 @@ void drop_to_bottom(void) {
     fix_block(block_number, block_state, x, y);
     clear_lines = clear_full_line();
     point += point_for_line(clear_lines);
+    // 최고 점수 갱신
+    if (point > best_point)
+        best_point = point;
     spawn_new_block();
 }

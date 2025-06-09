@@ -60,7 +60,7 @@ int y = 0;
 int game = GAME_END;
 
 long point = 0;
-int best_point;
+int best_point = 0;
 
 int clear_lines = 0;
 

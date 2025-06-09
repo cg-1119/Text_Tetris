@@ -109,6 +109,10 @@ bool load_point() {
         else if (scanned != 8) {
             return false;
         }
+        // 최고 점수 갱신
+        if (result.point > best_point)
+            best_point = result.point;
+
         Node *new_node = make_node(&result);
         if (result_list == NULL) result_list = new_node;
         else {
