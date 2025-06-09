@@ -111,8 +111,10 @@ int game_start(void)
         name[strcspn(name, "\n")] = '\0'; // 개행문자 null로 교체
 
     // 입력이 없으면 저장 x
-    if (name[0] != '\0')
+    if (name[0] != '\0') {
         save_point_to_list(name);
+        save_point_to_file();
+    }
     
 
     fflush(stdout);
