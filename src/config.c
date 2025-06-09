@@ -68,7 +68,7 @@ ResultList result_list = NULL;
 
 int list_length = 0;
 
-char *filename = "points.txt";
+char *filename = "./points.txt";
 
 
 Node* make_node(Result *result) {

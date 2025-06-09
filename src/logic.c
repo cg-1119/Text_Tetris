@@ -7,9 +7,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/time.h>
 #include <string.h>
+
+#ifdef _WIN32
+  #include <windows.h>
+  static void sleep_ms(int ms) {
+      Sleep(ms);
+  }
+#else
+  #include <unistd.h>
+  static void sleep_ms(int ms) {
+      usleep(ms * 1000);
+  }
+#endif
 
 
 // 시간 비교 헬퍼 함수
@@ -87,7 +98,7 @@ int game_start(void)
 
 
         draw_game_screen();
-        usleep(50000);
+        sleep_ms(50); // 프레임 딜레이
     }
     restore_terminal();
     draw_game_over();
