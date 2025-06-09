@@ -50,7 +50,7 @@ int game_start(void)
     init_table();
     init_tetromino();
 
-    const long drop_ms = 500; // 블록 자동으로 떨어지는 간격 = 0.5초
+    const long drop_ms = 700; // 블록 자동으로 떨어지는 간격 = 0.7초
     struct timeval prev_time, curr_time;
     gettimeofday(&prev_time, NULL);
 
@@ -124,28 +124,31 @@ int game_start(void)
 
 void search_result(void)
 {
-    /* TODO: 기록 검색 로직 구현 (빈 틀) */
+    draw_search_page();
+    printf("\x1b[%d;%dH", 11, 22);
 }
 
 void print_result(void)
 {
     setup_terminal();
     int total_pages = (list_length + 4) / 5;
+    int current_page = 0;
+    draw_record_page(current_page);
+
+    // total_pages가 0이면 종료
     if (total_pages == 0) {
+        int ch;
         restore_terminal();
-        printf("No search game record.\n");
-        printf("Press Enter key to exit program.");
+        while ((ch = getchar()) != '\n' && ch != EOF) {}
         getchar();
         return;
     }
-    int current_page = 0;
-    draw_record_page(current_page);
 
     while (true) {
         int key = get_key();
         if (!key) {
             // 키 입력이 없으면 loop를 잠깐 쉬었다가 다시 확인
-            usleep(50 * 1000); // 50ms 정도
+            usleep(50 * 1000);
             continue;
         }
 

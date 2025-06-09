@@ -25,23 +25,27 @@ void draw_game_screen(void) {
     printf("\x1b[2J");
     printf("\x1b[H");
 
-    draw_board();
+    draw_table();
     draw_tetromino();
     draw_point();
     draw_next_block();
     
     fflush(stdout);
 }
-void draw_board(void) {
-    for (int row = 0; row < 21; row++) {
-        for (int col = 0; col < 10; col++) {
-            if (tetris_table[row][col] == 1) {
+void draw_table(void) {
+    for (int row = 0; row < TABLE_ROWS - 1; row++) {
+        printf("\x1b[%d;1H", row + 1);
+        for (int col = 0; col < TABLE_COLS; col++) {
+            if (tetris_table[row][col]) {
                 printf("[]");
             } else {
                 printf("  ");
             }
         }
-        printf("\n");
+        printf("\x1b[21;1H");
+        for (int col = 0; col < 10; col++) {
+            printf("[]");
+        }
     }
 }
 void draw_tetromino(void) {
@@ -115,8 +119,14 @@ void draw_record_page(int page_index) {
     printf("\x1b[2J");
     printf("\x1b[H");
 
-    // 총 페이지 수 보여주기
+    // 보여줄 페이지가 없는 경우 종료
     int total_pages = (list_length + 4) / 5;
+    if (total_pages == 0) {
+        printf("No search game record.\n");
+        printf("Press Enter key to game menu.");
+        return;
+    }
+    // 총 페이지 수 보여주기
     printf("==== Game Results (Page %d of %d, Total %d to %d of %d) ====\n\n",
            page_index + 1,
            total_pages,
@@ -156,4 +166,14 @@ void draw_record_page(int page_index) {
 
     printf("\n[j] Previous Page    [l] Next Page    [p] Quit\n");
     fflush(stdout);
+}
+
+void draw_search_page(void) {
+    printf("\x1b[2J");
+    printf("\x1b[%d;%dH", 6, 22);
+    printf("+==============================+\n");
+    printf("|          Search Page         |\n");       
+    printf("+==============================+\n");
+    printf("|   name:                      |\n");
+    printf("+==============================+");
 }
