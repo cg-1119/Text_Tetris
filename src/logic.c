@@ -11,11 +11,8 @@
 
 #ifdef _WIN32
   #include <windows.h>
-  // Windows에 없는 timeval 구현
-  struct timeval {
-      long tv_sec;   // seconds
-      long tv_usec;  // microseconds
-  };
+  #include <winsock2.h>
+  #include <stdint.h>
 
   static void sleep_ms(int ms) {
       Sleep(ms);
