@@ -2,6 +2,7 @@
 #include "include/logic.h"
 #include "include/render.h"
 #include "include/point.h"
+#include "include/input.h"
 
 #include <stdlib.h>
 #include <stdio.h>

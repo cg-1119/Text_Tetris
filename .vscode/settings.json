@@ -7,6 +7,7 @@
         "config.h": "c",
         "point.h": "c",
         "termios.h": "c",
-        "limits.h": "c"
+        "limits.h": "c",
+        "time.h": "c"
     }
 }

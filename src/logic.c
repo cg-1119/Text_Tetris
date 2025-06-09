@@ -7,18 +7,41 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <string.h>
 
 #ifdef _WIN32
   #include <windows.h>
+  // Windows에 없는 timeval 구현
+  struct timeval {
+      long tv_sec;   // seconds
+      long tv_usec;  // microseconds
+  };
+
   static void sleep_ms(int ms) {
       Sleep(ms);
   }
+  static void get_time_of_day(struct timeval *tv) {
+      FILETIME ft;
+      ULARGE_INTEGER uli;
+      GetSystemTimeAsFileTime(&ft);
+      uli.LowPart  = ft.dwLowDateTime;
+      uli.HighPart = ft.dwHighDateTime;
+
+      // Windows epoch → Unix epoch
+      // 100-ns 단위를 μs 단위로 변환(나누기 10)
+      uint64_t usec = (uli.QuadPart - 116444736000000000ULL) / 10;
+      tv->tv_sec  = (long)(usec / 1000000ULL);
+      tv->tv_usec = (long)(usec % 1000000ULL);
+  }
+
 #else
   #include <unistd.h>
+  #include <sys/time.h>
   static void sleep_ms(int ms) {
       usleep(ms * 1000);
+  }
+   static void get_time_of_day(struct timeval *tv) {
+      gettimeofday(tv, NULL);
   }
 #endif
 
@@ -63,7 +86,7 @@ int game_start(void)
 
     const long drop_ms = 700; // 블록 자동으로 떨어지는 간격 = 0.7초
     struct timeval prev_time, curr_time;
-    gettimeofday(&prev_time, NULL);
+    get_time_of_day(&prev_time);
 
     // 게임 루프
     while (game == GAME_START) {
@@ -77,23 +100,23 @@ int game_start(void)
             else if (key == 'k' || key == 'K') {
                 // 직접 다운을 했으면 타이머 리셋
                 move_down();
-                gettimeofday(&prev_time, NULL);
+                get_time_of_day(&prev_time);
             }
             else if (key == 'i' || key == 'I')
                 rotate_block();
             else if (key == 'a' || key == 'A') {
                 drop_to_bottom();
-                gettimeofday(&prev_time, NULL);
+                get_time_of_day(&prev_time);
             }
             else if (key == 'p' || key == 'P')
                 game = GAME_END;
         }
         // 자동 낙하 계산
-        gettimeofday(&curr_time, NULL);
+        get_time_of_day(&curr_time);
         long elapsed = time_diff_ms(&prev_time, &curr_time);
         if (elapsed >= drop_ms) {
             move_down();
-            gettimeofday(&prev_time, NULL); // 자동 낙하 후 기준 시각을 현재 시각으로 재설정
+            get_time_of_day(&prev_time); // 자동 낙하 후 기준 시각을 현재 시각으로 재설정
         }
 
 
@@ -174,7 +197,7 @@ void print_result(void)
         int key = get_key();
         if (!key) {
             // 키 입력이 없으면 loop를 잠깐 쉬었다가 다시 확인
-            usleep(50 * 1000);
+            sleep_ms(50);
             continue;
         }
 

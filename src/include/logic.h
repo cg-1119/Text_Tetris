@@ -10,4 +10,7 @@ int game_start();
 void search_result();
 void print_result();
 
+static void sleep_ms(int ms);
+static void get_time_of_day(struct timeval *tv);
+
 #endif // LOGIC_H
