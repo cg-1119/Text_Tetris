@@ -2,8 +2,11 @@
 <img src="https://img.shields.io/badge/c-064F8C?style=for-the-badge&logo=c&logoColor=white">
 
 <img src="/img/Initial.png" style="width:50%"/>
+
 **Welcome to Text Tetris.**
+
 2025 1학기 창원대학교 컴퓨터공학과 자료구조 텀프로젝트
+
 Text Tetris is a purely text-based implementation of the classic Tetris, written in C for console
 
 **Compatibility checked on:**
@@ -77,11 +80,14 @@ long point_for_line(int lines) {
 ```
 #### 1-2 난이도
 기본 블록 떨어지는 속도는 700ms(0.7초)이며, 난이도 구현은 되어있지 않습니다.(난이도 1 고정)
+
 #### 1-3 점수 기록
 <img src="/img/record_point.png" style="width:30%"/>
 
 게임이 종료되면(p 입력 포함) 이름을 입력 후 세이브 파일(./src/points.txt)에 저장합니다.
+
 만약 저장을 원하지 않으면 입력을 하지 않고 엔터를 누르면 됩니다.
+
 <img src="/img/record_zero_point.png" style="width:30%"/>
 
 점수가 0점이라면, 저장되지 않습니다.
