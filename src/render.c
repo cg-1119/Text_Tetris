@@ -3,6 +3,7 @@
 #include "include/type.h"
 
 #include <stdio.h>
+#include <ctype.h>
 
 void draw_main_menu(void) {
     printf("\x1b[2J");
@@ -146,17 +147,15 @@ void draw_record_page(int page_index) {
     }
 
     int printed = 0;
-    int seq_num = page_index * 5 + 1;
     while (cur && printed < 5) {
         Result *r = &cur->data;
         printf("%-4d %-20s %-8ld %04d-%02d-%02d %02d:%02d\n",
-               seq_num,
+               r->rank,
                r->name,
                r->point,
                r->year, r->month, r->day,
                r->hour, r->min);
         printed++;
-        seq_num++;
         cur = cur->next;
     }
 
@@ -172,8 +171,58 @@ void draw_search_page(void) {
     printf("\x1b[2J");
     printf("\x1b[%d;%dH", 6, 22);
     printf("+==============================+\n");
-    printf("|          Search Page         |\n");       
+    printf("\x1b[%d;%dH", 7, 22);
+    printf("|          Search Page         |\n");
+    printf("\x1b[%d;%dH", 8, 22);
     printf("+==============================+\n");
+    printf("\x1b[%d;%dH", 9, 22);
     printf("|   name:                      |\n");
+    printf("\x1b[%d;%dH", 10, 22);
     printf("+==============================+");
+}
+
+void draw_search_results(char *query) {
+    printf("\x1b[2J");
+    printf("\x1b[H");
+    printf("============ Search Results for \"%s\" ============\n\n", query);
+    printf("%-4s %-20s %-8s %-16s\n",
+           "Rank", "Name", "Point", "Date-Time");
+    printf("--------------------------------------------------------\n");
+    
+    // 리스트 순회하며 부분 일치 검색
+    Node *cur = result_list;
+    int found = 0;
+    while (cur) {
+        char name_lower[30], query_lower[30]; // 대소문자 구분 없이 일치하는지 검사
+        // 원본 복사 후 소문자로 변환
+        strncpy(name_lower, cur->data.name, sizeof(name_lower));
+        name_lower[sizeof(name_lower)-1] = '\0';
+        for (int i = 0; name_lower[i]; i++) {
+            name_lower[i] = tolower((unsigned char)name_lower[i]);
+        }
+        strncpy(query_lower, query, sizeof(query_lower));
+        query_lower[sizeof(query_lower)-1] = '\0';
+        for (int i = 0; query_lower[i]; i++) {
+            query_lower[i] = tolower((unsigned char)query_lower[i]);
+        }
+
+        if (strstr(name_lower, query_lower)) {
+            // 일치하는 레코드가 있으면 출력
+            Result *r = &cur->data;
+            printf("%-4d %-20s %-8ld %04d-%02d-%02d %02d:%02d\n",
+                   r->rank,
+                   r->name,
+                   r->point,
+                   r->year, r->month, r->day,
+                   r->hour, r->min);
+            found = 1;
+        }
+        cur = cur->next;
+    }
+    if (!found) {
+        printf("\n[No matching records found]\n");
+    }
+
+    printf("\nPress Enter to return to menu");
+    fflush(stdout);
 }

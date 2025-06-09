@@ -122,16 +122,20 @@ int game_start(void)
 void search_result(void)
 {
     draw_search_page();
-    char name[30];
-    printf("\x1b[%d;%dH", 7, 7);
+
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+
+    char query[30];
+    printf("\x1b[%d;%dH", 9, 31);
     fflush(stdout);
 
-    if (!fgets(name, sizeof(name), stdin)) return;
-    name[strcspn(name, "\n")] = '\0';
+    if (!fgets(query, sizeof(query), stdin)) return;
+    query[strcspn(query, "\n")] = '\0';
 
-    if (name[0] == '\0') return;
+    if (query[0] == '\0') return;
 
-    draw_search_result(name);
+    draw_search_results(query);
     getchar();
 }
 

@@ -22,5 +22,6 @@ void draw_savefile_exception_message(void);
 void draw_record_page(int page_index);
 
 void draw_search_page(void);
+void draw_search_results(char *query);
 
 #endif // RENDER_H
