@@ -28,9 +28,8 @@ bool save_point_to_list(char* name) {
 
     Result result;
 
-    // name 버퍼크기 만큼 복사 후 맨 끝에 Null
     strncpy(result.name, name, sizeof(result.name) - 1);
-    result.name[sizeof(result.name)-1] = '\0';
+    result.name[sizeof(result.name)-1] = '\0'; // name 버퍼크기 만큼 복사 후 맨 끝에 Null
     result.point = point;
     result.year  = lt->tm_year + 1900;
     result.month = lt->tm_mon + 1;

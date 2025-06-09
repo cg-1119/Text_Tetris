@@ -107,17 +107,14 @@ int game_start(void)
     // 버퍼 비우기
     while ((ch = getchar()) != '\n' && ch != EOF) {}
 
-    // 이름이 입력되지 않으면 Anonymous로 저장
-    if (fgets(name, sizeof(name), stdin) != NULL) {
-        // fgets는 맨 끝에 \n을 포함하기 때문에 제거
-        name[strcspn(name, "\n")] = '\0';
-        if (name[0] == '\0') {
-            strcpy(name, "Anonymous");
-        }
-    } else {
-        strcpy(name, "Anonymous");
-    }
-    save_point_to_list(name);
+    if (fgets(name, sizeof(name), stdin) != NULL)
+        name[strcspn(name, "\n")] = '\0'; // 개행문자 null로 교체
+
+    // 입력이 없으면 저장 x
+    if (name[0] != '\0')
+        save_point_to_list(name);
+    
+
     fflush(stdout);
     return GAME_END;
 }
@@ -125,7 +122,17 @@ int game_start(void)
 void search_result(void)
 {
     draw_search_page();
-    printf("\x1b[%d;%dH", 11, 22);
+    char name[30];
+    printf("\x1b[%d;%dH", 7, 7);
+    fflush(stdout);
+
+    if (!fgets(name, sizeof(name), stdin)) return;
+    name[strcspn(name, "\n")] = '\0';
+
+    if (name[0] == '\0') return;
+
+    draw_search_result(name);
+    getchar();
 }
 
 void print_result(void)
