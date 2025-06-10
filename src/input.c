@@ -4,6 +4,7 @@
 
   #include <conio.h>
   #include <windows.h>
+  #include <stdio.h>
 
   void setup_terminal(void) {
     printf("\x1b[?25l");
