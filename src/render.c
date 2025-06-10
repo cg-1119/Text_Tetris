@@ -22,9 +22,7 @@ void draw_main_menu(void) {
 
 void draw_game_screen(void) {
     // ANSI Escape로 화면 제어
-    printf("\x1b[3J");
-    printf("\x1b[2J");
-    printf("\x1b[H");
+    printf("\x1b[3J\x1b[2J\x1b[H");
 
     draw_table();
     draw_tetromino();
