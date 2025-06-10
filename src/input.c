@@ -5,8 +5,15 @@
   #include <conio.h>
   #include <windows.h>
 
-  void setup_terminal(void) {}
-  void restore_terminal(void) {}
+  void setup_terminal(void) {
+    printf("\x1b[?25l");
+    setvbuf(stdout, buf, _IOFBF, 1000);
+  }
+  void restore_terminal(void) {
+    printf("\x1b[?25h");
+    fflush(stdout);
+    setvbuf(stdout, NULL, _IONBF, 0);
+  }
   int get_key(void) {
       if (_kbhit()) {
           return _getch();
