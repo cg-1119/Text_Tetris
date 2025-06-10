@@ -6,6 +6,8 @@
   #include <windows.h>
   #include <stdio.h>
 
+  static char buf[1000];
+  
   void setup_terminal(void) {
     printf("\x1b[?25l");
     setvbuf(stdout, buf, _IOFBF, 1000);
