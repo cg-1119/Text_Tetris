@@ -10,14 +10,16 @@
 #include <string.h>
 
 #ifdef _WIN32
-  #include <windows.h>
-  #include <winsock2.h>
-  #include <stdint.h>
+    #define WIN32_LEAN_AND_MEAN  
+    #define _WINSOCKAPI_
+    #include <winsock2.h>
+    #include <windows.h>
+    #include <stdint.h>
 
-  static void sleep_ms(int ms) {
-      Sleep(ms);
-  }
-  static void get_time_of_day(struct timeval *tv) {
+    static void sleep_ms(int ms) {
+        Sleep(ms);
+    }
+    static void get_time_of_day(struct timeval *tv) {
       FILETIME ft;
       ULARGE_INTEGER uli;
       GetSystemTimeAsFileTime(&ft);

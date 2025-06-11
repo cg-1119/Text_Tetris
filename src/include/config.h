@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define _CRT_SECURE_NO_WARNINGS
+
 /*  
 * 공통으로 쓰이는 매크로, 전역 변수 들의 모음
 */
