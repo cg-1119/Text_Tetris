@@ -120,7 +120,7 @@ int game_start(void)
 
 
         draw_game_screen();
-        sleep_ms(50); // 프레임 딜레이
+        sleep_ms(30); // 프레임 딜레이
     }
     restore_terminal();
     draw_game_over();
