@@ -80,11 +80,12 @@ Node* make_node(Result *result) {
 }
 
 void free_list() {
-    Node *tmp = result_list;
-    while (tmp ->next != NULL) {
-        Node *next = tmp->next;
-        free(tmp);
-        tmp = next;
+    Node *curr = result_list;
+    Node *next;
+    while (curr != NULL) {
+        next = curr->next;
+        free(curr);
+        curr = next;
     }
     result_list = NULL;
 }
