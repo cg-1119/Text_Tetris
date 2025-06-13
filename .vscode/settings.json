@@ -8,6 +8,8 @@
         "point.h": "c",
         "termios.h": "c",
         "limits.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "stddef.h": "c",
+        "type.h": "c"
     }
 }

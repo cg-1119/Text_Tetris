@@ -80,6 +80,8 @@ int display_menu(void)
 int game_start(void)
 {
     setup_terminal();
+    ui_init_screen_buffer();
+
     init_table();
     init_tetromino();
 
@@ -118,10 +120,12 @@ int game_start(void)
             get_time_of_day(&prev_time); // 자동 낙하 후 기준 시각을 현재 시각으로 재설정
         }
 
-
-        draw_game_screen();
+        build_frame_buffer();
+        diff_and_draw();
+        fflush(stdout);
         sleep_ms(30); // 프레임 딜레이
     }
+    ui_restore_screen();
     restore_terminal();
     draw_game_over();
     // 0 포인트는 기록 미지원

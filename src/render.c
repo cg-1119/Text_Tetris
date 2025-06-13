@@ -3,7 +3,154 @@
 #include "include/type.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <ctype.h>
+
+#define FB_ROWS    TABLE_ROWS
+#define UI_COLS    30
+#define FB_COLS   ((TABLE_COLS * 2) + UI_COLS)
+
+// 커서 제어
+#define CSI_HIDE_CURSOR  "\x1b[?25l"
+#define CSI_SHOW_CURSOR  "\x1b[?25h"
+#define CSI_CLEAR_SCREEN "\x1b[2J"
+#define CURSOR_POS(r,c)  printf("\x1b[%d;%dH", (r), (c))
+
+// 프레임 버퍼
+static char old_frame[FB_ROWS][FB_COLS];
+static char new_frame[FB_ROWS][FB_COLS];
+
+static inline void build_table(void) {
+    for (int y = 0; y < TABLE_ROWS - 1; y++) {
+        for (int sx = 0; sx < TABLE_COLS; sx++) {
+            int cx = sx * 2;
+            if (tetris_table[y][sx]) {
+                new_frame[y][cx]     = '[';
+                new_frame[y][cx + 1] = ']';
+            } else {
+                new_frame[y][cx]     = ' ';
+                new_frame[y][cx + 1] = ' ';
+            }
+        }
+    }
+    // 바닥
+    int y = TABLE_ROWS - 1;
+    for (int sx = 0; sx < TABLE_COLS; sx++) {
+        int cx = sx * 2;
+        new_frame[y][cx]     = '[';
+        new_frame[y][cx + 1] = ']';
+    }
+}
+
+static inline void build_tetromino(void) {
+    for (int r = 0; r < 4; r++) {
+        for (int c = 0; c < 4; c++) {
+            if (tetrominos[block_number][block_state][r][c]) {
+                int fy = y + r;
+                int fx = (x + c) * 2;
+                new_frame[fy][fx]     = '[';
+                new_frame[fy][fx + 1] = ']';
+            }
+        }
+    }
+}
+
+static inline void build_point(void) {
+    char buf1[32], buf2[32];
+    int len1 = snprintf(buf1, sizeof(buf1), "Best Point : %ld", best_point);
+    int len2 = snprintf(buf2, sizeof(buf2), "Point      : %ld", point);
+
+    int start_col = (TABLE_COLS * 2) + 1; 
+
+    for (int i = 0; i < len1; i++) {
+        new_frame[0][start_col + i] = buf1[i];
+    }
+    for (int i = 0; i < len2; i++) {
+        new_frame[1][start_col + i] = buf2[i];
+    }
+}
+
+static inline void build_next_block(void) {
+    // 테이블(20열) 바로 다음(UI 첫 열)은 21열 → 인덱스 20
+    const int start_col = (TABLE_COLS * 2) + 1;
+    // 타이틀은 5행에
+    const int title_row = 5;
+
+    // 1) "Next" 타이틀
+    const char *label = "Next";
+    for (int i = 0; label[i]; i++) {
+        new_frame[title_row][start_col + i + 5] = label[i];
+    }
+
+    // 박스 테두리
+    const char *border = "+------------+";
+    int width     = (int)strlen(border);
+    int top_row   = title_row + 1;
+    int bottom_row= title_row + 7;
+    int left_col  = start_col;
+
+    for (int i = 0; i < width; i++) {
+        new_frame[top_row][left_col + i] = border[i];
+    }
+    for (int r = top_row + 1; r < bottom_row; r++) {
+        new_frame[r][left_col]             = '|';
+        new_frame[r][left_col + width - 1] = '|';
+    }
+    for (int i = 0; i < width; i++) {
+        new_frame[bottom_row][left_col + i] = border[i];
+    }
+
+    // 다음블록
+    int nt = next_block_number;
+    for (int r = 0; r < 4; r++) {
+        for (int c = 0; c < 4; c++) {
+            if (tetrominos[nt][LEFT][r][c]) {
+                int fy = top_row + 2 + r;
+                int fx = left_col + 5 + c * 2;
+                new_frame[fy][fx]     = '[';
+                new_frame[fy][fx + 1] = ']';
+            }
+        }
+    }
+}
+
+void ui_init_screen_buffer(void) {
+    // old_frame을 모두 공백으로 초기화
+    for (int r = 0; r < FB_ROWS; r++)
+        for (int c = 0; c < FB_COLS; c++)
+            old_frame[r][c] = ' ';
+    // 화면 클리어 + 커서 숨김
+    printf(CSI_CLEAR_SCREEN CSI_HIDE_CURSOR);
+}
+
+void build_frame_buffer(void) {
+    // new_frame 전체 공백으로 초기화
+    for (int r = 0; r < FB_ROWS; r++)
+        for (int c = 0; c < FB_COLS; c++)
+            new_frame[r][c] = ' ';
+
+    build_table();
+    build_tetromino();
+    build_point();
+    build_next_block();
+}
+
+void diff_and_draw(void) {
+    for (int r = 0; r < FB_ROWS; r++) {
+        for (int c = 0; c < FB_COLS; c++) {
+            if (new_frame[r][c] != old_frame[r][c]) {
+                CURSOR_POS(r + 1, c + 1);
+                putchar(new_frame[r][c]);
+                old_frame[r][c] = new_frame[r][c];
+            }
+        }
+    }
+}
+
+void ui_restore_screen(void) {
+    printf(CSI_SHOW_CURSOR);
+}
+
 
 void draw_main_menu(void) {
     printf("\x1b[2J");
@@ -19,79 +166,6 @@ void draw_main_menu(void) {
     printf("\t\t\t============================\n");
     printf("\t\t\t\t\t SELECT : ");
 }
-
-void draw_game_screen(void) {
-    // ANSI Escape로 화면 제어
-    printf("\x1b[3J\x1b[2J\x1b[H");
-
-    draw_table();
-    draw_tetromino();
-    draw_point();
-    draw_next_block();
-    
-    fflush(stdout);
-}
-void draw_table(void) {
-    for (int row = 0; row < TABLE_ROWS - 1; row++) {
-        printf("\x1b[%d;1H", row + 1);
-        for (int col = 0; col < TABLE_COLS; col++) {
-            if (tetris_table[row][col]) {
-                printf("[]");
-            } else {
-                printf("  ");
-            }
-        }
-        printf("\x1b[21;1H");
-        for (int col = 0; col < 10; col++) {
-            printf("[]");
-        }
-    }
-}
-void draw_tetromino(void) {
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            if (tetrominos[block_number][block_state][row][col]) {
-                int table_row = y + row;
-                int table_col = x + col;
-                printf("\x1b[%d;%dH", table_row + 1, table_col * 2 + 1);
-                printf("[]");
-            }
-        }
-    }
-}
-void draw_point(void) {
-    printf("\x1b[%d;%dH", 1, 22);
-    printf("Best Point : %d", best_point);
-    printf("\x1b[%d;%dH", 2, 22);
-    printf("Point : %ld", point);
-}
-
-void draw_next_block(void) {
-    printf("\x1b[%d;%dH", 5, 27);
-    printf("Next");
-    printf("\x1b[%d;%dH", 6, 22);
-    printf("+------------+");
-    for (int r = 7; r <= 11; r++) {
-        printf("\x1b[%d;%dH", r, 22);
-        printf("|            |");
-    }
-    printf("\x1b[%d;%dH", 12, 22);
-    printf("+------------+");
-
-    int next_type = next_block_number;
-    // 블록 출력
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            if (tetrominos[next_type][LEFT][row][col]) {
-                int table_row = 8 + row;
-                int table_col = 27 + col * 2;
-                printf("\x1b[%d;%dH", table_row, table_col);
-                printf("[]");
-            }
-        }
-    }
-}
-
 void draw_game_over(void) {
     printf("\x1b[%d;%dH", 7, 1);
     printf("+==============================+\n");
