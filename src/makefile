@@ -1,4 +1,4 @@
-CC=clang
+CC=gcc
 CFLAGS=-I. -g -O3
 DEPS = include/*.h
 SRC = config.c table.c input.c logic.c main.c render.c tetromino.c point.c
