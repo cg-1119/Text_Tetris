@@ -12,9 +12,9 @@ Text Tetris is a purely text-based implementation of the classic Tetris, written
 **Compatibility checked on:**
 |Compiler|Target|OS|Checked|
 |-|-|-|:-:|
-|GCC|aarch64-linux-gnu|Ubuntu||
-|Apple clang|arm64-apple|macOS||
-|GCC|x86_64-w64-mingw32|Windows 11||
+|GCC|aarch64-linux-gnu|Ubuntu|✅|
+|Apple clang|arm64-apple|macOS|✅|
+|LLVM clang|x86_64-pc-windows-msvc|Windows 11|✅|
 
 ### Table of Contents
 - [Features](#features)
@@ -100,5 +100,11 @@ long point_for_line(int lines) {
 
 ### 3. 전체 기록 보기
 <img src="/img/record_output.png" style="width:50%"/>
-점수 오름차순 기준 순위를 보여줍니다
+
+#### 부분 일치(Substring Matching)
+사용자가 입력한 문자열이 이름의 어느 위치에 있든 상관없이 검색됩니다.
+
+#### 대 · 소문자 무시
+검색어와 저장된 이름은 모두 소문자로 변환한 뒤 비교하므로 대소문자 구분 없이 검색합니다.
+
 동일 점수는 먼저 기록된 사람이 더 높은 등수를 가집니다.
